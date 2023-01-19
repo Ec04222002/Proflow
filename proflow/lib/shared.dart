@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:proflow/models/word.dart';
 
 const Map<String, Map<String, dynamic>> themes = {
   "proflow": {
@@ -35,12 +36,6 @@ const Map<String, Map<String, dynamic>> themes = {
     "shadow": Color(0xFFffdcdc),
     "foreground": Color.fromARGB(255, 239, 240, 243),
   },
-  "business-man": {
-    "gradient": [Color(0xFF090d11), Color(0xFF48596c)],
-    "button": Color(0xFFa1aab3),
-    "shadow": Color(0xFFe1e4eb),
-    "foreground": Color(0xFFfffffd),
-  },
   "avatar": {
     "gradient": [Color(0xFF0F2347), Color(0xFF1C3F6E), Color(0xFF2E67A0)],
     "button": Color(0xFF5AACCF),
@@ -64,6 +59,26 @@ enum ToolLabel {
   String get labelName => name.replaceAll('__', ' ').replaceAll('_', '/');
 }
 
+const String appName = "proflow";
+const String appNameCap = "Proflow";
+Map<ToolLabel, Function> easterEggs = {
+  ToolLabel.Dictionary: (String searchWord) {
+    searchWord.toLowerCase().trim() == appName;
+    return const Word(
+      word: appNameCap,
+      defAndExamples: {
+        "A productivity desktop-app, which boosts efficiency through various tools like: an alarm, timer, to-do list, calculator, screen recorder, and etc.":
+            [
+          "The Proflow software, is the best productivity booster on the market."
+        ]
+      },
+      audioUrl: "",
+      partOfSpeech: "",
+      pronounciation: "",
+      synonyms: [],
+    );
+  },
+};
 const double defaultHeight = 70;
 const double maxExtendHeight = 550;
 const double btnWidth = 79;
@@ -174,4 +189,14 @@ void animateMove(double dx, double dy,
       usePostAnimation();
     }
   });
+}
+
+List<List<dynamic>> zipList(List itemsFront, List itemsBack) {
+  List<List<dynamic>> res = [];
+  if (itemsFront.length != itemsBack.length) throw "Mis-match size of lists";
+  for (var i = 0; i < itemsFront.length; i++) {
+    res.add([itemsFront[i], itemsBack[i]]);
+  }
+
+  return res;
 }

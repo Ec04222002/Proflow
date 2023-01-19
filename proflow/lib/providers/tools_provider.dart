@@ -19,7 +19,7 @@ import 'package:proflow/screens/todo_list.dart';
 import 'package:proflow/screens/dictionary.dart';
 
 class Tools with ChangeNotifier {
-  dynamic currentTheme = themes["purple-haze"];
+  dynamic currentTheme = themes["avatar"];
   bool isMainPanelClosed = true;
   bool isToolTipPanelClosed = true;
   bool isUsingKeys = false;
@@ -32,9 +32,13 @@ class Tools with ChangeNotifier {
   final double bottomMarginAcc = 0.005;
   final double bottomMarginTolerance = 3.5;
   HotKeys hotKeys = HotKeys();
-  Widget currentMainWidget = Container();
+  Widget currentMainWidget = const SizedBox(
+    width: 0,
+    height: 0,
+  );
   Map<ToolLabel, Map<String, dynamic>> tools = {
     ToolLabel.Calculator: {
+      "widget": const Calculator(),
       "icon": const Icon(Ionicons.calculator_outline, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -42,6 +46,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Alarm_Timer: {
+      "widget": const AlarmAndTimer(),
       "icon": const Icon(Ionicons.alarm_outline, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -49,6 +54,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Notes: {
+      "widget": const Notes(),
       "icon": const Icon(LineIcons.stickyNote, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -56,6 +62,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Todos__List: {
+      "widget": const TodosList(),
       "icon": const Icon(LineIcons.check, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -63,6 +70,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Dictionary: {
+      "widget": const Dictionary(),
       "icon": const Icon(LineIcons.spellCheck, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -70,6 +78,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Reminder: {
+      "widget": const Reminder(),
       "icon": const Icon(LineIcons.bell, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -77,6 +86,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Email: {
+      "widget": const Email(),
       "icon": const Icon(LineIcons.envelope, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -84,6 +94,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Screen__Recorder: {
+      "widget": const ScreenRecorder(),
       "icon": const Icon(LineIcons.video, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -91,6 +102,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
     ToolLabel.Settings: {
+      "widget": const Settings(),
       "icon": const Icon(LineIcons.cog, size: 30),
       "isActive": false,
       "isHovered": false,
@@ -166,17 +178,13 @@ class Tools with ChangeNotifier {
     currentMainWidget = assignWidget;
   }
 
-  void clearMainWidget() {
-    currentMainWidget = Container();
-  }
-
   //set local from local settings
   void setHover(ToolLabel label, bool newHover) {
     bool currentToolHover = tools[label]!['isHovered'];
     if (newHover == currentToolHover) return;
 
     tools[label]!['isHovered'] = newHover;
-    debugPrint("${label} is hovered: ${newHover}");
+    // debugPrint("${label} is hovered: ${newHover}");
     containsHover = hoveredTools.isNotEmpty;
     isUsingKeys = false;
     notifyListeners();
@@ -289,7 +297,7 @@ class Tools with ChangeNotifier {
     isCurrentExiting = true;
     final Function savedPostFunction = postAnimationCall;
     setPostAnimation(() async {
-      debugPrint('in post of animeExitTool');
+      // debugPrint('in post of animeExitTool');
       isCurrentExiting = false;
       await exitPostMove();
 
@@ -312,36 +320,8 @@ class Tools with ChangeNotifier {
   }
 
   void showMainWidget(ToolLabel showTool) {
-    switch (showTool) {
-      case ToolLabel.Calculator:
-        setMainWidget(const Calculator());
-        break;
-      case ToolLabel.Alarm_Timer:
-        setMainWidget(const AlarmAndTimer());
-        break;
-      case ToolLabel.Notes:
-        setMainWidget(const Notes());
-        break;
-      case ToolLabel.Todos__List:
-        setMainWidget(const TodosList());
-        break;
-      case ToolLabel.Dictionary:
-        setMainWidget(const Dictionary());
-        break;
-      case ToolLabel.Reminder:
-        setMainWidget(const Reminder());
-        break;
-      case ToolLabel.Email:
-        setMainWidget(const Email());
-        break;
-      case ToolLabel.Screen__Recorder:
-        setMainWidget(const ScreenRecorder());
-        break;
-      case ToolLabel.Settings:
-        setMainWidget(const Settings());
-        break;
-      default:
-    }
+    Widget currentWidget = tools[showTool]!["widget"];
+    setMainWidget(currentWidget);
     notifyListeners();
   }
 
@@ -352,15 +332,15 @@ class Tools with ChangeNotifier {
   }
 
   void animateClosePanel() {
-    debugPrint(isMainPanelClosed.toString());
+    // debugPrint(isMainPanelClosed.toString());
     stopAnimationTimer();
 
     //closing bottomTooltip
     if (containsHover) {
-      debugPrint("in first");
+      // debugPrint("in first");
       animateResize(Size(buttonBarWidth, defaultHeight + bottomToolTipMargin));
     } else if (isMainPanelClosed && !isToolTipPanelClosed) {
-      debugPrint('only small panel');
+      // debugPrint('only small panel');
       animateResize(Size(buttonBarWidth, defaultHeight),
           percentChangePerTime: bottomMarginRate,
           percentChangeAcc: bottomMarginAcc,

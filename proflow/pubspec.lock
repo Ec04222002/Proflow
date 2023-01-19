@@ -310,6 +310,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.5"
+  random_words:
+    dependency: "direct main"
+    description:
+      name: random_words
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   screen_retriever:
     dependency: transitive
     description:

@@ -1,5 +1,6 @@
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:proflow/services/dict_define.dart';
+import '/services/last_data.dart';
 
 class Dictionary extends StatefulWidget {
   const Dictionary({super.key});
@@ -9,8 +10,20 @@ class Dictionary extends StatefulWidget {
 }
 
 class _DictionaryState extends State<Dictionary> {
+  // Dictionary dictData = lastDictEntry ?? await getDefinition();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    debugPrint('createing dictionary');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Text("hello"),
+    );
   }
 }

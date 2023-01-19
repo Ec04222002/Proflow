@@ -20,9 +20,10 @@ void main() async {
   ], child: const App()));
 
   await HotKeys().setInitKeys(toolProvider);
-
+  //call set init for tools
   doWhenWindowReady(() {
-    const initialSize = Size(btnWidth * 10, defaultHeight);
+    Size initialSize =
+        Size(btnWidth * toolProvider.savedTools.length, defaultHeight);
     resizeUI(initialSize);
     appWindow.alignment = Alignment.topRight;
     appWindow.show();

@@ -59,7 +59,7 @@ class _ToolButtonState extends State<ToolButton> {
     }
 
     void handleHover(bool hover) {
-      debugPrint("in tool button");
+      // debugPrint("in tool button");
       toolsProvider.handleHover(toolLabel, hover);
     }
 
