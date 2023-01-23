@@ -5,44 +5,9 @@ import 'dart:async';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:proflow/models/dictionary_m.dart';
 import 'package:proflow/models/word.dart';
-
-const Map<String, Map<String, dynamic>> themes = {
-  "proflow": {
-    "gradient": [
-      Color(0xFF1C1B22),
-      Color(0xFF2A2A2E),
-      Color(0xFF2A2A2E),
-    ],
-    "button": Color.fromARGB(255, 175, 174, 174),
-    "shadow": Color.fromARGB(255, 243, 237, 237),
-    "foreground": Color(0xFFf2f0ec),
-  },
-  "purple-haze": {
-    "gradient": [Color(0xFF210535), Color(0xFF430d4b)],
-    "button": Color(0xFF7b337d),
-    "shadow": Color(0xFFc874b2),
-    "foreground": Color(0xFFf5d5e0),
-  },
-  "swiss-chalet": {
-    "gradient": [Color.fromARGB(255, 38, 38, 38), Color(0xFF41474a)],
-    "button": Color(0xFF81847d),
-    "shadow": Color(0xFFb9c1b9),
-    "foreground": Color(0xFFf2f0ec),
-  },
-  "cherry-blossom": {
-    "gradient": [Color(0xFFbc244a), Color(0xFFf25477)],
-    "button": Color(0xFFffa7a6),
-    "shadow": Color(0xFFffdcdc),
-    "foreground": Color.fromARGB(255, 239, 240, 243),
-  },
-  "avatar": {
-    "gradient": [Color(0xFF0F2347), Color(0xFF1C3F6E), Color(0xFF2E67A0)],
-    "button": Color(0xFF5AACCF),
-    "shadow": Color(0xFFEFFC93),
-    "foreground": Color(0xFFC0E1B8),
-  }
-};
+import 'package:proflow/screens/dictionary.dart';
 
 enum ToolLabel {
   Calculator,
@@ -59,12 +24,15 @@ enum ToolLabel {
   String get labelName => name.replaceAll('__', ' ').replaceAll('_', '/');
 }
 
+String capitalize(String word) =>
+    "${word[0].toUpperCase()}${word.substring(1).toLowerCase()}";
+
 const String appName = "proflow";
-const String appNameCap = "Proflow";
-Map<ToolLabel, Function> easterEggs = {
-  ToolLabel.Dictionary: (String searchWord) {
-    searchWord.toLowerCase().trim() == appName;
-    return const Word(
+String appNameCap = capitalize(appName);
+
+Map<ToolLabel, dynamic> easterEggs = {
+  ToolLabel.Dictionary: DictionaryM(words: [
+    Word(
       word: appNameCap,
       defAndExamples: {
         "A productivity desktop-app, which boosts efficiency through various tools like: an alarm, timer, to-do list, calculator, screen recorder, and etc.":
@@ -72,17 +40,36 @@ Map<ToolLabel, Function> easterEggs = {
           "The Proflow software, is the best productivity booster on the market."
         ]
       },
-      audioUrl: "",
-      partOfSpeech: "",
-      pronounciation: "",
-      synonyms: [],
-    );
-  },
+      audioUrl: "assets/app_name.mp3",
+      partOfSpeech: "Noun",
+      pronounciation: "/proʊ floʊ/",
+      synonyms: ["Software", "Productivity", "Efficiency"],
+    )
+  ])
 };
+
 const double defaultHeight = 70;
 const double maxExtendHeight = 550;
 const double btnWidth = 79;
 const double btnHeight = 70;
+
+Color darken(Color color, [double amount = .1]) {
+  assert(amount >= 0 && amount <= 1);
+
+  final hsl = HSLColor.fromColor(color);
+  final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+  return hslDark.toColor();
+}
+
+Color lighten(Color color, [double amount = .1]) {
+  assert(amount >= 0 && amount <= 1);
+
+  final hsl = HSLColor.fromColor(color);
+  final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+  return hslLight.toColor();
+}
 
 void resizeUI(Size toSize) {
   appWindow.minSize = toSize;
@@ -125,13 +112,13 @@ void setPostAnimation(Function postCall) {
   postAnimationCall = postCall;
 }
 
-void addAdditionalPostAnimation(Function additionalCall) {
-  Function lastPostAnimation = postAnimationCall;
-  postAnimationCall = () async {
-    await lastPostAnimation();
-    additionalCall();
-  };
-}
+// void addAdditionalPostAnimation(Function additionalCall) {
+//   Function lastPostAnimation = postAnimationCall;
+//   postAnimationCall = () async {
+//     await lastPostAnimation();
+//     additionalCall();
+//   };
+// }
 
 void usePostAnimation() {
   postAnimationCall();
@@ -189,14 +176,4 @@ void animateMove(double dx, double dy,
       usePostAnimation();
     }
   });
-}
-
-List<List<dynamic>> zipList(List itemsFront, List itemsBack) {
-  List<List<dynamic>> res = [];
-  if (itemsFront.length != itemsBack.length) throw "Mis-match size of lists";
-  for (var i = 0; i < itemsFront.length; i++) {
-    res.add([itemsFront[i], itemsBack[i]]);
-  }
-
-  return res;
 }

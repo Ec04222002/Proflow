@@ -19,7 +19,7 @@ import 'package:proflow/screens/todo_list.dart';
 import 'package:proflow/screens/dictionary.dart';
 
 class Tools with ChangeNotifier {
-  dynamic currentTheme = themes["avatar"];
+  // dynamic currentTheme = themes["proflow"];
   bool isMainPanelClosed = true;
   bool isToolTipPanelClosed = true;
   bool isUsingKeys = false;
@@ -36,7 +36,7 @@ class Tools with ChangeNotifier {
     width: 0,
     height: 0,
   );
-  Map<ToolLabel, Map<String, dynamic>> tools = {
+  final Map<ToolLabel, Map<String, dynamic>> tools = {
     ToolLabel.Calculator: {
       "widget": const Calculator(),
       "icon": const Icon(Ionicons.calculator_outline, size: 30),
@@ -117,6 +117,7 @@ class Tools with ChangeNotifier {
       "toolTipKey": null,
     },
   };
+
   //update firebase and local tools
   // Map<ToolLabel, Map<String, dynamic>> add(ToolLabel label) {}
   // Map<ToolLabel, Map<String, dynamic>> remove(ToolLabel label) {}
@@ -159,7 +160,7 @@ class Tools with ChangeNotifier {
   ToolLabel get hoveredLabel =>
       toToolList(savedTools)[getCurrentHoveredIndex()];
   ToolLabel get activeLabel => toToolList(savedTools)[getCurrentActiveIndex()];
-  dynamic get theme => currentTheme;
+  // dynamic get theme => currentTheme;
   double get buttonBarWidth => btnWidth * tools.length;
   Widget get mainWidget => currentMainWidget;
 

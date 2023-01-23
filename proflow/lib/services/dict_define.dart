@@ -5,26 +5,19 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:random_words/random_words.dart';
-import '../models/dictionary.dart';
+// import 'package:random_words/random_words.dart';
+import '../models/dictionary_m.dart';
 
 int maxRecomCount = 6;
 String appId = "84637d78";
 String appKey = "4cc1f58e0029897d6a6712db54275144";
-String baseUrl = "od-api.oxforddictionaries.com";
+String baseUri = "od-api.oxforddictionaries.com";
 String sourceLang = "en-us";
 
-String getRandomWord() {
-  bool isNoun = Random().nextInt(2) == 1;
-
-  if (isNoun) return nouns.take(1).first;
-  return adjectives.take(1).first;
-}
-
-Future<Dictionary> getDefinition(String word) async {
+Future<DictionaryM?> getDefinition(String word) async {
+  debugPrint("search word: $word");
   String endpoints = "/api/v2/words/$sourceLang";
 
   Map<String, String> query = {
@@ -36,14 +29,15 @@ Future<Dictionary> getDefinition(String word) async {
     "app_key": appKey,
   };
 
-  Uri uri = Uri.https(baseUrl, endpoints, query);
+  Uri uri = Uri.https(baseUri, endpoints, query);
 
   final response = await http.get(uri, headers: _headers);
-  debugPrint(response.toString());
+
+  // debugPrint(response.body.toString());
   if (response.statusCode == 200) {
-    return Dictionary.fromJson(jsonDecode(response.body));
+    return DictionaryM.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load definition');
+    return null;
   }
 }
 
@@ -59,7 +53,7 @@ Future<List<String>> getWordRecommends(String headWord) async {
     "app_id": appId,
     "app_key": appKey,
   };
-  Uri uri = Uri.https(baseUrl, endpoints, query);
+  Uri uri = Uri.https(baseUri, endpoints, query);
 
   final response = await http.get(uri, headers: _headers);
   if (response.statusCode == 200) {

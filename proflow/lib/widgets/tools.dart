@@ -40,9 +40,10 @@ class _ToolsUIState extends State<ToolsUI> {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: context.read<Tools>().theme['gradient'],
-                )),
+                    gradient: LinearGradient(colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                ])),
                 child: Column(
                   children: [
                     const Align(
@@ -69,22 +70,10 @@ class ToolBar extends StatefulWidget {
 }
 
 class _ToolBarState extends State<ToolBar> {
-  dynamic currentTheme;
-
-  Color? btnClr;
-  Color? shadow;
-  Color? foreground;
-  final double _elevation = 7;
   List<Widget> getTools(Map<ToolLabel, Map<String, dynamic>> savedTools) {
     final tools = <Widget>[];
     savedTools.forEach((toolStatus, toolParam) {
-      tools.add(ToolButton(
-          elevation: _elevation,
-          shadow: shadow,
-          btnClr: btnClr,
-          foreground: foreground,
-          icon: toolParam['icon'],
-          label: toolStatus));
+      tools.add(ToolButton(icon: toolParam['icon'], label: toolStatus));
     });
 
     return tools;
@@ -93,10 +82,6 @@ class _ToolBarState extends State<ToolBar> {
   @override
   Widget build(BuildContext context) {
     Tools currentTools = context.watch<Tools>();
-    currentTheme = currentTools.theme;
-    btnClr = currentTheme["button"];
-    shadow = currentTheme["shadow"];
-    foreground = currentTheme["foreground"];
     return ButtonBar(children: getTools(currentTools.savedTools));
   }
 }

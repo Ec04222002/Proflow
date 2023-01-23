@@ -1,9 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proflow/services/hot_keys.dart';
+import 'package:proflow/services/theme.dart';
 import 'package:proflow/widgets/tools.dart';
 import 'shared.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   Tools toolProvider = Tools();
-
+  DartVLC.initialize();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => toolProvider),
   ], child: const App()));
@@ -37,7 +39,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: GoogleFonts.poppins().fontFamily),
+      theme: proflow,
       home: const ToolsUI(),
     );
   }

@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  audio_video_progress_bar:
+    dependency: transitive
+    description:
+      name: audio_video_progress_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.0"
   bitsdojo_window:
     dependency: "direct main"
     description:
@@ -85,6 +92,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  dart_vlc:
+    dependency: "direct main"
+    description:
+      name: dart_vlc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
+  dart_vlc_ffi:
+    dependency: transitive
+    description:
+      name: dart_vlc_ffi
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0+1"
   fake_async:
     dependency: transitive
     description:
@@ -310,13 +331,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.5"
-  random_words:
-    dependency: "direct main"
-    description:
-      name: random_words
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   screen_retriever:
     dependency: transitive
     description:

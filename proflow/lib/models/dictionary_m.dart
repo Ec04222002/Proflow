@@ -1,6 +1,8 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:proflow/models/word.dart';
+import 'package:proflow/services/last_data.dart';
+import 'package:proflow/shared.dart';
 
 enum OxfordResProperty {
   results,
@@ -26,34 +28,39 @@ enum OxfordResProperty {
   String get asStr => name;
 }
 
-class Dictionary {
+class DictionaryM {
   final List<Word> words;
 
-  const Dictionary({required this.words});
+  const DictionaryM({required this.words});
 
-  factory Dictionary.fromJson(Map<String, dynamic> json) {
+  factory DictionaryM.fromJson(Map<String, dynamic> json) {
     // print(json[OxfordResProperty.results.asStr]);
     List<dynamic> results = json[OxfordResProperty.results.asStr];
     List<Word> _words = [];
     for (var res in results) {
       List<dynamic> lexEntries = res[OxfordResProperty.lexicalEntries.asStr];
 
-      for (var entry in lexEntries) {
-        Map<String, dynamic> _entry = entry[OxfordResProperty.entries.asStr][0];
-        List<dynamic> senses = _entry[OxfordResProperty.senses.asStr];
+      for (var entries in lexEntries) {
+        List<dynamic>? _entries = entries[OxfordResProperty.entries.asStr];
+        Map<String, dynamic> _entry = _entries![0];
 
-        final String? _text = entry[OxfordResProperty.text.asStr];
+        List<dynamic> senses = _entry[OxfordResProperty.senses.asStr];
+        final String? _text = entries[OxfordResProperty.text.asStr];
 
         final Map<String, List<String>> _defAndExamples = {};
-        late List<String>? _synonyms;
+        List<String>? _synonyms;
 
         //definitions and examples
         for (var sense in senses) {
           String def = sense[OxfordResProperty.definitions.asStr][0];
-          List<String> exs = [
-            for (var ex in sense[OxfordResProperty.examples.asStr])
-              ex[OxfordResProperty.text.asStr]
-          ];
+          List<dynamic>? examples = sense[OxfordResProperty.examples.asStr];
+
+          List<String> exs = examples != null
+              ? [
+                  for (var ex in examples)
+                    ex[OxfordResProperty.text.asStr].toString()
+                ]
+              : [];
           _defAndExamples[def] = exs;
           if (sense.containsKey(OxfordResProperty.synonyms.asStr)) {
             _synonyms = [
@@ -64,7 +71,7 @@ class Dictionary {
         }
 
         final String? _partOfSpeech =
-            entry[OxfordResProperty.lexicalCategory.asStr]
+            entries[OxfordResProperty.lexicalCategory.asStr]
                 [OxfordResProperty.text.asStr];
 
         final String? _pronounce =
@@ -84,6 +91,6 @@ class Dictionary {
         }));
       }
     }
-    return Dictionary(words: _words);
+    return DictionaryM(words: _words);
   }
 }
